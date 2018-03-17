@@ -32,20 +32,18 @@ body {
 		<div class="row">
 			<div
 				style="border: 1px solid #e4e4e4; width: 930px; margin-bottom: 10px; margin: 0 auto; padding: 10px; margin-bottom: 10px;">
-				<a href="./index.htm">首页&nbsp;&nbsp;&gt;</a> <a href="./蔬菜分类.htm">蔬菜&nbsp;&nbsp;&gt;</a>
+				<a href="${pageContext.request.contextPath }">首页&nbsp;&nbsp;&gt;</a> <a href="./蔬菜分类.htm">蔬菜&nbsp;&nbsp;&gt;</a>
 				<a>无公害蔬菜</a>
 			</div>
 
 			<div style="margin: 0 auto; width: 950px;">
 				<div class="col-md-6">
-					<img style="opacity: 1; width: 400px; height: 350px;" title=""
-						class="medium"
-						src="image/r___________renleipic_01/bigPic5f3622b8-028a-4e62-a77f-f41a16d715ed.jpg">
+					<img style="opacity: 1; width: 400px; height: 350px;" title="" class="medium" src="${pageContext.request.contextPath }/${product.pimage}">
 				</div>
 
 				<div class="col-md-6">
 					<div>
-						<strong>大冬瓜</strong>
+						<strong>${product.pname}</strong>
 					</div>
 					<div
 						style="border-bottom: 1px dotted #dddddd; width: 350px; margin: 10px 0 10px 0;">
@@ -53,8 +51,8 @@ body {
 					</div>
 
 					<div style="margin: 10px 0 10px 0;">
-						亿家价: <strong style="color: #ef0101;">￥：4.78元/份</strong> 参 考 价：
-						<del>￥6.00元/份</del>
+						商场价: <strong style="color: #ef0101;">￥：${product.market_price}</strong> 参 考 价：
+						<del>${product.shop_price}</del>
 					</div>
 
 					<div style="margin: 10px 0 10px 0;">
@@ -64,7 +62,7 @@ body {
 
 					<div
 						style="padding: 10px; border: 1px solid #e7dbb1; width: 330px; margin: 15px 0 10px 0;; background-color: #fffee6;">
-						<div style="margin: 5px 0 10px 0;">白色</div>
+						<div style="margin: 5px 0 10px 0;">${product.pdesc}</div>
 
 						<div
 							style="border-bottom: 1px solid #faeac7; margin-top: 20px; padding-left: 10px;">
@@ -79,6 +77,9 @@ body {
 							</a> &nbsp;收藏商品
 						</div>
 					</div>
+					<div>
+					    <a href="${pageContext.request.contextPath }/productListByCid?currentPage=${currentPage}&cid=${cid}">返回列表页面</a>
+					</div>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -90,7 +91,7 @@ body {
 
 				<div>
 					<img
-						src="image/r___________renleipic_01/bigPic139f030b-d68b-41dd-be6d-b94cc568d3c5.jpg">
+						src="${pageContext.request.contextPath }/${product.pimage}">
 				</div>
 
 				<div
