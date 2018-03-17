@@ -120,9 +120,12 @@ body {
 		<div style="overflow: hidden;">
 
 			<ul style="list-style: none;">
-				<li
-					style="width: 150px; height: 216; float: left; margin: 0 8px 0 0; padding: 0 18px 15px; text-align: center;"><img
-					src="products/1/cs10001.jpg" width="130px" height="130px" /></li>
+				<c:forEach items="${historyProductList }" var="historyPro">
+				    <li style="width: 150px; height: 216; float: left; margin: 0 8px 0 0; padding: 0 18px 15px; text-align: center;">
+				        <img src="${pageContext.request.contextPath }/${historyPro.pimage}" width="130px" height="130px" />
+					</li>
+				</c:forEach>
+				
 			</ul>
 
 		</div>
