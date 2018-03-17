@@ -56,12 +56,12 @@
 		    $(function(){
 		    	var content="";
 		    	$.post(
-		    	    "${pageContext.request.contextPath}/categoryList",
+		    	    "${pageContext.request.contextPath}/product?method=categoryList",
 		    	    function(data){
 		    	    	//data内部是[{"cid":"xxx","cname":"xxx"},{},{}]
 		    	    	//动态创建<li><a href="#">${category.cname }</a></li>
 		    	    	for(var i=0;i<data.length;i++){
-		    	    		content+="<li><a href='${pageContext.request.contextPath}/productListByCid?cid="+data[i].cid+"'>"+data[i].cname+"</a></li>";
+		    	    		content+="<li><a href='${pageContext.request.contextPath}/product?method=productListByCid&cid="+data[i].cid+"'>"+data[i].cname+"</a></li>";
 		    	    	}
 		    	    	//将拼接好的li放到ul中
 		    	    	$("#categoryUl").html(content);
