@@ -22,7 +22,9 @@ import java.util.List;
 
 import com.itheima.dao.ProductDao;
 import com.itheima.domain.Category;
+import com.itheima.domain.Order;
 import com.itheima.domain.Product;
+import com.itheima.utils.DataSourceUtils;
 import com.itheima.vo.PageBean;
 
 /**  
@@ -160,6 +162,60 @@ public class ProductService {
 			e.printStackTrace();
 		}
 		return product;
+	}
+
+	/**  
+	
+	 * Title: submitOrder  
+	
+	 * Description:  
+	
+	 * @param order  
+	
+	 */ 
+	public void submitOrder(Order order) {
+		ProductDao dao=new ProductDao();
+		try {
+			DataSourceUtils.startTransaction();
+			dao.addOrder(order);
+			dao.addOrderItem(order);
+		} catch (SQLException e) {
+			try {
+				DataSourceUtils.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				DataSourceUtils.commitAndRelease();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+	/**  
+	
+	 * Title: updateOrderAdrr  
+	
+	 * Description:  
+	
+	 * @param order  
+	
+	 */ 
+	public void updateOrderAdrr(Order order) {
+		ProductDao dao=new ProductDao();
+		try {
+			dao.updateOrderAdrr(order);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -17,6 +17,7 @@
 */
 package com.itheima.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +27,8 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.itheima.domain.Category;
+import com.itheima.domain.Order;
+import com.itheima.domain.OrderItem;
 import com.itheima.domain.Product;
 import com.itheima.utils.DataSourceUtils;
 
@@ -147,6 +150,63 @@ public class ProductDao {
 		String sql="select * from product where pid=?";
 		Product product = runner.query(sql, new BeanHandler<Product>(Product.class), pid);
 		return product;
+	}
+
+	/**  
+	
+	 * Title: addOrder  
+	
+	 * Description:  
+	
+	 * @param order  
+	 * @throws SQLException 
+	
+	 */ 
+	public void addOrder(Order order) throws SQLException {
+		QueryRunner runner=new QueryRunner();
+		Connection connection = DataSourceUtils.getConnection();
+		String sql="insert into orders values(?,?,?,?,?,?,?,?)";
+		runner.update(connection, sql, order.getOid(),order.getOrdertime(),order.getTotal(),order.getState(),order.getAddress(),
+				order.getName(),order.getTelephone(),order.getUser().getUid());
+		
+	}
+
+	/**  
+	
+	 * Title: addOrderItem  
+	
+	 * Description:  
+	
+	 * @param order  
+	 * @throws SQLException 
+	
+	 */ 
+	public void addOrderItem(Order order) throws SQLException {
+		QueryRunner runner=new QueryRunner();
+		Connection connection = DataSourceUtils.getConnection();
+		String sql="insert into orderitem values(?,?,?,?,?)";
+		List<OrderItem> orderItems = order.getOrderItems();
+		for (OrderItem orderItem : orderItems) {
+			runner.update(connection, sql,orderItem.getItemid(),orderItem.getCount(),orderItem.getSubtotal(),orderItem.getProduct().getPid(),orderItem.getOrder().getOid() );
+		}
+		
+	}
+
+	/**  
+	
+	 * Title: updateOrderAdrr  
+	
+	 * Description:  
+	
+	 * @param order  
+	 * @throws SQLException 
+	
+	 */ 
+	public void updateOrderAdrr(Order order) throws SQLException {
+		QueryRunner runner=new QueryRunner(DataSourceUtils.getDataSource());
+		String sql="update orders set address=? ,name=?, telephone=? where oid=?";
+		runner.update(sql, order.getAddress(),order.getName(),order.getTelephone(),order.getOid());
+		
 	}
 
 }

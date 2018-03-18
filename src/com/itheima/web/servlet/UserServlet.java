@@ -11,9 +11,11 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -25,22 +27,43 @@ import com.itheima.utils.CommonsUtils;
 import com.itheima.utils.MailUtils;
 
 public class UserServlet extends BaseServlet {
+	public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		UserService service =new UserService();
+		User user=null;
+		try {
+			user=service.login(username,password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(user!=null){
+			String autoLogin = request.getParameter("autoLogin");
+			if("true".equals(autoLogin)){
+				//要自动登录
+				//创建存储用户名的cookie
+				Cookie cookie_username = new Cookie("cookie_username",user.getUsername());
+				cookie_username.setMaxAge(10*60);
+				//创建存储密码的cookie
+				Cookie cookie_password = new Cookie("cookie_password",user.getPassword());
+				cookie_password.setMaxAge(10*60);
 
-	/*public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		String method = request.getParameter("method");
-		if("active".equals(method)){
-			active(request,response);
-		}else if("checkUsername".equals(method)){
-			checkUsername(request,response);
-		}else if("register".equals(method)){
-			register(request,response);
+				response.addCookie(cookie_username);
+				response.addCookie(cookie_password);
+		    }
+			session.setAttribute("user", user);
+			
+			response.sendRedirect(request.getContextPath());
+		}else{
+			request.setAttribute("loginError", "用户名或者密码错误");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
 		}
 	}
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}*/
+	
 	public void active(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获得激活码
 		String activeCode = request.getParameter("activeCode");

@@ -1,8 +1,10 @@
 package com.itheima.web.servlet;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,10 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import com.google.gson.Gson;
 import com.itheima.domain.Category;
+import com.itheima.domain.Order;
+import com.itheima.domain.OrderItem;
 import com.itheima.domain.Product;
+import com.itheima.domain.User;
 import com.itheima.service.ProductService;
+import com.itheima.utils.CommonsUtils;
 import com.itheima.utils.JedisPoolUtils;
 import com.itheima.vo.Cart;
 import com.itheima.vo.CartItem;
@@ -26,23 +34,68 @@ import com.itheima.vo.PageBean;
 import redis.clients.jedis.Jedis;
 
 public class ProductServlet extends BaseServlet {
-
-/*	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String method = request.getParameter("method");
-		if("categoryList".equals(method)){
-			categoryList(request,response);
-		}else if("index".equals(method)){
-			index(request,response);
-		}else if("productInfo".equals(method)){
-			productInfo(request,response);
-		}else if("productListByCid".equals(method)){
-			productListByCid(request,response);
+	
+	public void confirmOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Map<String, String[]> properties = request.getParameterMap();
+		Order order=new Order();
+		try {
+			BeanUtils.populate(order, properties);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		ProductService service=new ProductService();
+		service.updateOrderAdrr(order);
+	}
+	
+	
+	public void submitOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		
+		//1判断是否登录
+		User user = (User) session.getAttribute("user");
+		if(user==null){
+			response.sendRedirect(request.getContextPath()+"/login.jsp");
+			return;
+		}
+		//目的：封装order
+		Order order=new Order();
+		order.setOid(CommonsUtils.getUUID());
+		order.setOrdertime(new Date());
+		Cart cart = (Cart) session.getAttribute("cart");
+		order.setTotal(cart.getTotal());
+		order.setState(0);
+		order.setAddress(null);
+		order.setName(null);
+		order.setTelephone(null);
+		order.setUser(user);
+		
+		//order.setOrderItems(orderItems);
+		Map<String, CartItem> cartItems = cart.getCartItems();
+		for(Map.Entry<String, CartItem> entry : cartItems.entrySet()){
+			CartItem cartItem = entry.getValue();
+			OrderItem orderItem=new OrderItem();
+			orderItem.setItemid(CommonsUtils.getUUID());
+			orderItem.setCount(cartItem.getBuyNum());
+			orderItem.setSubtotal(cartItem.getSubtotal());
+			orderItem.setProduct(cartItem.getProduct());
+			orderItem.setOrder(order);
+			
+			order.getOrderItems().add(orderItem);
+		}
+		
+		ProductService service=new ProductService();
+		service.submitOrder(order);
+		
+		session.setAttribute("order", order);
+		
+		 response.sendRedirect(request.getContextPath()+"/order_info.jsp");
+		
 	}
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}*/
 	public void clearCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		//删除session中cart

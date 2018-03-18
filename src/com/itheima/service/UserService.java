@@ -92,5 +92,23 @@ public class UserService {
 		}
 		return count>0?true:false;
 	}
+
+	/**  
+	
+	 * Title: login  
+	
+	 * Description:  
+	
+	 * @param username
+	 * @param password
+	 * @return  
+	 * @throws SQLException 
+	
+	 */ 
+	public User login(String username, String password) throws SQLException {
+		UserDao dao=new UserDao();
+		
+		return dao.login(username,password);
+	}
     
 }
