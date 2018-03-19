@@ -209,4 +209,20 @@ public class ProductDao {
 		
 	}
 
+	/**  
+	
+	 * Title: updateOrderStatu  
+	
+	 * Description:  
+	
+	 * @param r6_Order  
+	 * @throws SQLException 
+	
+	 */ 
+	public void updateOrderState(String r6_Order) throws SQLException {
+		QueryRunner runner=new QueryRunner(DataSourceUtils.getDataSource());
+		String sql="update orders set state=? where oid=?";
+		runner.update(sql, 1,r6_Order);
+	}
+
 }

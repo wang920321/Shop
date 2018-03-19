@@ -218,4 +218,24 @@ public class ProductService {
 		
 	}
 
+	/**  
+	
+	 * Title: updateOrderStatu  
+	
+	 * Description:  
+	
+	 * @param r6_Order  
+	
+	 */ 
+	public void updateOrderState(String r6_Order) {
+		ProductDao dao=new ProductDao();
+		try {
+			dao.updateOrderState(r6_Order);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }

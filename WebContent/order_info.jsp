@@ -98,7 +98,7 @@ body {
 				<div class="form-group">
 					<label for="confirmpwd" class="col-sm-1 control-label">电话</label>
 					<div class="col-sm-5">
-						<input type="password" class="form-control" id="telephone" name="telephone"
+						<input type="text" class="form-control" id="telephone" name="telephone"
 							placeholder="请输入联系方式">
 					</div>
 				</div>
