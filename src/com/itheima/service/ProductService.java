@@ -23,8 +23,10 @@ import java.util.List;
 import com.itheima.dao.ProductDao;
 import com.itheima.domain.Category;
 import com.itheima.domain.Order;
+import com.itheima.domain.OrderItem;
 import com.itheima.domain.Product;
 import com.itheima.utils.DataSourceUtils;
+import com.itheima.vo.OrderItemTo;
 import com.itheima.vo.PageBean;
 
 /**  
@@ -236,6 +238,72 @@ public class ProductService {
 			e.printStackTrace();
 		}
 		
+	}
+
+	/**  
+	
+	 * Title: findAllOrders  
+	
+	 * Description:  
+	
+	 * @param uid
+	 * @return  
+	
+	 */ 
+	public List<Order> findAllOrders(String uid) {
+		ProductDao dao=new ProductDao();
+		List<Order> orderList=null;
+		try {
+			orderList = dao.findAllOrders(uid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return orderList;
+	}
+
+	/**  
+	
+	 * Title: findAllOrderItems  
+	
+	 * Description:  
+	
+	 * @param oid
+	 * @return  
+	
+	 */ 
+	public List<OrderItemTo> findAllOrderItems(String oid) {
+		ProductDao dao=new ProductDao();
+		List<OrderItemTo> orderItemTos=null;
+		try {
+			orderItemTos = dao.findAllOrderItems(oid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return orderItemTos;
+	}
+
+	/**  
+	
+	 * Title: findProductByItemId  
+	
+	 * Description:  
+	
+	 * @param itemid
+	 * @return  
+	
+	 */ 
+	public Product findProductByItemId(String pid) {
+		ProductDao dao=new ProductDao();
+		Product prodcut=null;
+		try {
+			prodcut = dao.findProductByItemId(pid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return prodcut;
 	}
 
 }

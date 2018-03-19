@@ -31,6 +31,7 @@ import com.itheima.domain.Order;
 import com.itheima.domain.OrderItem;
 import com.itheima.domain.Product;
 import com.itheima.utils.DataSourceUtils;
+import com.itheima.vo.OrderItemTo;
 
 /**  
 
@@ -223,6 +224,61 @@ public class ProductDao {
 		QueryRunner runner=new QueryRunner(DataSourceUtils.getDataSource());
 		String sql="update orders set state=? where oid=?";
 		runner.update(sql, 1,r6_Order);
+	}
+
+	/**  
+	
+	 * Title: findAllOrders  
+	
+	 * Description:  
+	
+	 * @param uid
+	 * @return  
+	 * @throws SQLException 
+	
+	 */ 
+	public List<Order> findAllOrders(String uid) throws SQLException {
+		QueryRunner runner=new QueryRunner(DataSourceUtils.getDataSource());
+		String sql="select * from orders where uid=? ";
+		List<Order> orderList = runner.query(sql, new BeanListHandler<Order>(Order.class), uid);
+		return orderList;
+		
+	}
+
+	/**  
+	
+	 * Title: findAllOrderItems  
+	
+	 * Description:  
+	
+	 * @param oid
+	 * @return  
+	 * @throws SQLException 
+	
+	 */ 
+	public List<OrderItemTo> findAllOrderItems(String oid) throws SQLException {
+		QueryRunner runner=new QueryRunner(DataSourceUtils.getDataSource());
+		String sql="select * from orderitem where oid=? ";
+		List<OrderItemTo> orderItemTos = runner.query(sql, new BeanListHandler<OrderItemTo>(OrderItemTo.class), oid);
+		return orderItemTos;
+		
+	}
+
+	/**  
+	
+	 * Title: findProductByItemId  
+	
+	 * Description:  
+	
+	 * @return  
+	 * @throws SQLException 
+	
+	 */ 
+	public Product findProductByItemId(String pid) throws SQLException {
+		QueryRunner runner=new QueryRunner(DataSourceUtils.getDataSource());
+		String sql="select * from product where pid=? ";
+		Product product = runner.query(sql, new BeanHandler<Product>(Product.class), pid);
+		return product;
 	}
 
 }

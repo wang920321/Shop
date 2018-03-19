@@ -30,12 +30,57 @@ import com.itheima.utils.JedisPoolUtils;
 import com.itheima.utils.PaymentUtil;
 import com.itheima.vo.Cart;
 import com.itheima.vo.CartItem;
+import com.itheima.vo.OrderItemTo;
 import com.itheima.vo.PageBean;
 
 import redis.clients.jedis.Jedis;
 
 public class ProductServlet extends BaseServlet {
-	
+	public void myOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		//1判断是否登录
+				User user = (User) session.getAttribute("user");
+				if(user==null){
+					response.sendRedirect(request.getContextPath()+"/login.jsp");
+					return;
+				}
+       //2查询该用户的所有订单信息（单表查询orders表）
+				ProductService service=new ProductService();
+				//集合中的每一个Order对象的数据是不完整的，缺少List<OrderItem> orderItems数据
+				List<Order> orderList=service.findAllOrders(user.getUid());
+				//循环所有订单 为每个订单填充订单项集合信息
+				if(orderList!=null){
+					
+					
+						for (Order order : orderList) {
+							List<OrderItemTo> orderItemTos=service.findAllOrderItems(order.getOid());
+							
+							for (OrderItemTo orderItemTo : orderItemTos) {
+								Product product=service.findProductByItemId(orderItemTo.getPid());
+								OrderItem orderItem=new OrderItem();
+								orderItem.setCount(orderItemTo.getCount());
+								orderItem.setSubtotal(orderItemTo.getSubtotal());
+								orderItem.setProduct(product);
+								order.getOrderItems().add(orderItem);
+							}
+						/*	for (int i = 0; i <orderItemTos.size(); i++) {
+								Product product=service.findProductByItemId(orderItemTos.get(i).getPid());
+								OrderItem orderItem=new OrderItem();
+								orderItem.setProduct(product);
+								
+								order.getOrderItems().add(orderItem);
+							}*/
+							
+					
+						
+						
+					}
+						
+				}
+				request.setAttribute("orderList", orderList);
+				request.getRequestDispatcher("/order_list.jsp").forward(request, response);
+				
+	}
 	public void confirmOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Map<String, String[]> properties = request.getParameterMap();
 		Order order=new Order();
