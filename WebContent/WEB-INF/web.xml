@@ -44,4 +44,24 @@
     <servlet-name>CallbackServlet</servlet-name>
     <url-pattern>/callback</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminServlet</display-name>
+    <servlet-name>AdminServlet</servlet-name>
+    <servlet-class>com.itheima.web.servlet.AdminServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminAddProductServlet</display-name>
+    <servlet-name>AdminAddProductServlet</servlet-name>
+    <servlet-class>com.itheima.web.servlet.AdminAddProductServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminAddProductServlet</servlet-name>
+    <url-pattern>/adminAddProduct</url-pattern>
+  </servlet-mapping>
 </web-app>

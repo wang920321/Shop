@@ -15,7 +15,7 @@
 		
 		<c:if test="${!empty user }">
 		    <li>欢迎你${user.username }</li>
-			
+			<li><a href="${pageContext.request.contextPath }/user?method=logout">退出</a></li>
 		</c:if>
 		<c:if test="${empty user }">
 		    <li><a href="login.jsp">登录</a></li>
